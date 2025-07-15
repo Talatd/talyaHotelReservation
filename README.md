@@ -1,107 +1,89 @@
-Talya Hotel Resevation System
+Talya Hotel Reservation System
 
-🏨 Multi-Tenant Otel Rezervasyon Platformu: Geleceğin Konaklama Deneyimi
-Bu proje, Elektrwaweb Talya Bilişim tarafından geliştirilmekte olan, birden fazla otelin kendi operasyonlarını uçtan uca yönetebileceği çok kiracılı (multi-tenant), yenilikçi bir otel rezervasyon platformudur. Hedefimiz, hem misafirlere kusursuz bir arama ve rezervasyon deneyimi sunmak hem de otel işletmelerine dijital varlıklarını güçlendirecek kapsamlı araçlar sağlamaktır.
+🏨 Multi-Tenant Otel Rezervasyon Platformu: Araştırma ve Yol Haritası
+Elektrwaweb Talya Bilişim bünyesinde geliştirilmesi planlanan bu proje, birden fazla otelin kendi envanterlerini, fiyatlarını ve rezervasyonlarını yönetebileceği Multi-Tenant (Çok Kiracılı) bir Otel Rezervasyon Platformu'dur. Bu doküman, projenin analizini, temel mimari yaklaşımını ve hangi aşamalardan geçerek hayata geçirileceğine dair bir yol haritasını sunmaktadır.
 
-✨ Ana Modüller ve Güçlü Özellikler
-Platformumuz, birbirini tamamlayan modüler bir yapı üzerine inşa edildi. İşte temel sistemlerimiz ve sundukları yetenekler:
+Amacımız, hem son kullanıcıya zengin filtreleme ve keşif araçlarıyla kişiselleştirilmiş bir deneyim sunmak hem de otel işletmelerine kendi operasyonlarını yönetecekleri ve pazarlayacakları güçlü bir panel sağlamaktır.
 
-1. Kullanıcı ve Kimlik Yönetimi
-Platformdaki her kullanıcının (misafir, otel yöneticisi, platform yöneticisi) dijital kimliğini ve yetkilerini merkezden yönetiyoruz.
+🎯 Proje Vizyonu ve Kapsamına Genel Bakış
+Bu platformun temel vizyonu, otelcilik sektöründeki dijitalleşme ihtiyacına yenilikçi, ölçeklenebilir ve çoklu otel yönetimine uygun bir çözüm getirmektir. Projenin kapsamı, temel rezervasyon mekanizmalarından, otel yöneticisi panellerine ve dinamik fiyatlandırma yeteneklerine kadar geniş bir yelpazeyi kapsamaktadır.
 
-Esnek Kimlik Doğrulama: E-posta/şifre ile hızlı kayıt ve giriş, şifre sıfırlama mekanizmaları.
+💡 Multi-Tenant Yaklaşımın Önemi ve Analizi
+Projenin en kritik noktalarından biri multi-tenant (çok kiracılı) yapıda olmasıdır. Bu, her bir otelin (kiracı) platform üzerinde kendine ait, izole edilmiş bir ortamda çalışması anlamına gelirken, tüm kaynakların (kod tabanı, veritabanı şeması) ortak kullanıldığı bir mimariyi gerektirir.
 
-Rol Bazlı Yetkilendirme (RBAC): Her rol için özel erişim hakları tanımladık:
+Neden Multi-Tenant?
 
-Misafirler: Otel arayabilir, rezervasyon yapabilir, kendi profillerini kişiselleştirebilir.
+Ölçeklenebilirlik: Yeni otelleri kolayca platforma dahil etme yeteneği.
 
-Otel Yöneticileri: Sadece kendi otellerinin envanterini (odalar, fiyatlar), içeriklerini ve rezervasyonlarını yönetebilir.
+Maliyet Etkinliği: Her otel için ayrı bir yazılım veya sunucu yerine, tek bir platform üzerinden hizmet sunumu.
 
-Platform Yöneticileri: Tüm sistemi denetleyebilir, yeni otel başvurularını onaylayabilir.
+Yönetim Kolaylığı: Tek bir kod tabanında yapılan güncellemelerin tüm otellere uygulanabilmesi.
 
-Kapsamlı Kullanıcı Profili: Kişisel bilgiler, geçmiş ve gelecek rezervasyonlar, favori otel listeleri tek bir yerden yönetilebilir.
+Veri İzolasyonu: Her otelin verisinin diğer otellerden bağımsız ve güvenli bir şekilde saklanması.
 
-(Planlanan) Sosyal Giriş: Google/Facebook entegrasyonu ile tek tıkla kayıt/giriş kolaylığı.
+Multi-Tenant Çözüm Araştırması:
 
-2. Otel ve İçerik Yönetimi
-Otel yöneticileri için tasarlanan bu modül, işletmelerin dijital vitrinlerini en iyi şekilde sergilemelerini sağlar.
+Veritabanı Seviyesinde:
 
-Detaylı Otel Profili: Otelin adı, yıldız sayısı, açıklama, adres, iletişim bilgileri gibi temel verilerin yönetimi.
+Paylaşımlı Veritabanı, Paylaşımlı Şema (En sık kullanılan): Tüm oteller aynı veritabanını ve aynı tabloları kullanır, her tabloda tenant_id (otel ID'si) bulunur. Bu yaklaşım başlangıç için en uygunudur.
 
-Coğrafi Konumlandırma: Harita üzerinde doğru konumlandırma için enlem ve boylam bilgileri.
+Paylaşımlı Veritabanı, Ayrı Şemalar: Her otel için aynı veritabanında ayrı bir şema oluşturulur.
 
-Oda Envanteri Yönetimi: Farklı oda tipleri (standart, süit vb.) ve bu tiplere bağlı fiziksel oda stoklarının (örn. Oda 101, Oda 102) güncel tutulması.
+Ayrı Veritabanları: Her otel için tamamen ayrı bir veritabanı kullanılır (daha karmaşık ve maliyetli).
 
-Görsel Galeri: Otel ve oda galerileri için yüksek kaliteli fotoğraf yükleme ve düzenleme imkanı.
+Uygulama Seviyesinde: Gelen isteğin hangi otele ait olduğunun tespit edilmesi ve veri erişimlerinin bu tenant_id'ye göre filtrelenmesi kritik öneme sahiptir.
 
-Zengin Olanak Yönetimi: Havuz, Spa, Wi-Fi, Otopark, Restoran gibi standart olanak listesinden kendi otelinde bulunanları işaretleyerek profilini zenginleştirme.
+📊 Platformun Ana Sistemleri ve Modüler Yapısı
+Platform, kapsamlı bir analiz sonucunda belirlenen ve birbiriyle entegre çalışan modüler sistemler üzerine inşa edilecektir:
 
-3. Akıllı Arama ve Keşif Motoru
-Misafirlerin aradıkları oteli kolayca bulmalarını sağlayan, platformun en dinamik parçası.
+1. Kullanıcı ve Kimlik Yönetim Sistemi
+Platforma giren her aktörün (misafir, otel yöneticisi, platform yöneticisi) kimliğini, rolünü ve yetkilerini yönetir. Bu sistemde otel yöneticilerinin sadece kendi otellerine ait verilere erişebilmesi rol tabanlı yetkilendirme (RBAC) ile sağlanacaktır.
 
-Hızlı ve Detaylı Arama: Konum, giriş/çıkış tarihleri ve misafir sayısına (yetişkin/çocuk) göre anında sonuçlar.
+2. Otel ve İçerik Yönetim Sistemi
+Otel yöneticilerinin kendi otellerinin dijital vitrinlerini oluşturup yönettikleri alandır. Burada her otelin kendine özel envanter (oda tipleri, fiziksel odalar), fiyatlandırma ve görsel içeriklerini bağımsız olarak yönetebilmesi temel esastır.
 
-Gelişmiş Filtreleme:
+3. Arama, Keşif ve Filtreleme Motoru
+Misafirlerin otelleri konum, tarih, kişi sayısı ve diğer detaylı kriterlere göre arayabileceği ve keşfedebileceği akıllı bir sistemdir. Multi-tenant yapıdan bağımsız olarak tüm oteller üzerinde arama yapabilmesi sağlanacaktır.
 
-Fiyat Aralığı: Minimum-maksimum fiyat sürgüleri ile bütçeye uygun otelleri bulma.
+4. Değerlendirme ve Yorum Sistemi
+Platformun güvenilirliğini ve şeffaflığını sağlayan, konaklama yapmış misafirlerin yorum ve puanlarını içerir.
 
-Yıldız Kategorisi: İstenilen yıldız sayısına göre filtreleme.
+5. Rezervasyon ve Fiyatlandırma Motoru
+Platformun ticari işlemlerinin ve en karmaşık iş mantığının yönetildiği çekirdek sistemdir. Oda müsaitliğinin ve dinamik fiyatlandırmanın her bir otelin envanterine özel olarak yönetilmesi kritik öneme sahiptir.
 
-Pansiyon Tipi: Her Şey Dahil, Oda Kahvaltı gibi seçeneklerle arama.
-
-Tesis İmkanları: Belirli olanaklara (örn. havuzlu oteller) göre filtreleme.
-
-Misafir Puanı: Diğer kullanıcıların değerlendirmelerine göre sıralama.
-
-Görsel Sonuçlar: Hem klasik liste görünümü hem de interaktif harita üzerinde filtrelenmiş otelleri görüntüleme.
-
-4. Güvenilir Değerlendirme ve Yorum Sistemi
-Platformun şeffaflığını ve güvenilirliğini artıran, kullanıcı geri bildirimlerini temel alan sistem.
-
-Detaylı Puanlama: Genel puana ek olarak Temizlik, Personel, Konum gibi alt kategorilerde değerlendirme.
-
-Onaylı Yorumlar: Sadece "Onaylı Konaklama" yapmış kullanıcıların yorum ve puanlama yapabilmesini sağlayarak güvenilirliği artırma.
-
-Yönetici Etkileşimi: Otel yöneticilerinin yapılan yorumlara açıkça cevap verebilme imkanı.
-
-5. Akıllı Rezervasyon ve Fiyatlandırma Motoru
-Platformun ticari operasyonlarının kalbi olan bu sistem, karmaşık iş mantığını yönetir.
-
-Anlık Müsaitlik Kontrolü: Seçilen tarihlerde odanın rezerve edilebilirliğini anında doğrulama.
-
-Dinamik Fiyat Hesaplaması: Otel yöneticisinin tanımladığı kurallara (sezonluk, hafta sonu, uzun konaklama indirimleri gibi) göre fiyatları otomatik olarak ayarlama.
-
-Şeffaf Rezervasyon Akışı: Oda seçimi, şeffaf fiyat dökümü, misafir bilgileri girişi ve ödeme simülasyonu ile kolay ve anlaşılır rezervasyon süreci.
-
-⏳ Proje Fazları ve Yol Haritası
-Projenin kapsamı ve staj süreci göz önüne alınarak, geliştirme adımları mantıksal fazlara ayrıldı. 4 haftalık staj sürecindeki ana hedefimiz, Faz 1'i tamamlamaktır.
+📈 Proje Fazları ve Geliştirme Stratejisi
+Projenin büyüklüğü ve staj sürecinin kısıtlı süresi göz önüne alınarak, özellikler mantıksal fazlara ayrılmıştır. 4 haftalık staj sürecinde Faz 1'in tamamlanması ana hedeftir. Bu fazlar, projenin nasıl aşamalar halinde geliştirileceğine dair bir yol haritası sunmaktadır.
 
 FAZ 1: Minimum Uygulanabilir Ürün (MVP) - Staj Hedefi
-Temel Kullanıcı Sistemi: Misafir ve Otel Yöneticisi rolleri için kayıt/giriş fonksiyonelliği.
+Bu aşama, platformun temel çekirdek işlevselliğini içerecek ve aşağıdaki özelliklere odaklanacaktır:
 
-Otel Yönetiminin Çekirdeği: Otel yöneticisinin kendi otel bilgilerini, oda tiplerini ve temel geceleme fiyatını sisteme girebilmesi.
+Çok Kiracılı Kullanıcı Sistemi: Misafir ve Otel Yöneticisi rolleriyle temel kayıt/giriş ve her otel yöneticisinin yalnızca kendi otel verisine erişebilmesi.
 
-Basit Arama Fonksiyonu: Misafirlerin konum ve giriş/çıkış tarihlerine göre otel arayabilmesi.
+Temel Otel Yönetimi: Otel yöneticisinin kendi otelini, basit oda tiplerini ve temel geceleme fiyatını sisteme ekleyebilmesi.
 
-Temel Rezervasyon Akışı: Bir misafirin seçtiği odaya rezervasyon yapabilme yeteneği.
+Temel Arama Fonksiyonu: Misafirlerin konum ve tarihe göre tüm oteller arasında basit arama yapabilmesi.
 
-Basit Değerlendirme: Konaklama sonrası misafirlerin puan ve kısa yorum bırakabilmesi.
+Basit Rezervasyon Akışı: Bir misafirin seçtiği odaya temel bir rezervasyon yapabilme yeteneği.
+
+Çekirdek Değerlendirme: Konaklama sonrası misafirlerin otellere puan/yorum bırakabilmesi.
 
 FAZ 2: Gelişmiş Özellikler - Platform Olgunlaşması
-Dinamik ve detaylı filtreleme motoru (imkanlara, yıldıza, fiyat aralığına göre).
+MVP'nin ötesinde, kullanıcı deneyimini ve platformun yeteneklerini genişletecek özellikler:
 
-Kullanıcı profili entegrasyonu ve favorilere otel ekleme özelliği.
+Gelişmiş filtreleme seçenekleri (imkanlara, yıldız sayısına, fiyat aralığına göre).
+
+Favorilere otel ekleme ve kullanıcı profili detaylandırma.
 
 Harita üzerinde otel konumlarının interaktif gösterimi.
 
 Kural tabanlı dinamik fiyatlandırma motorunun tam entegrasyonu.
 
 FAZ 3: Stratejik Vizyon - Gelecek Potansiyeli
-Akıllı otel karşılaştırma aracı.
+Uzun vadede platformu sektör liderliğine taşıyacak yenilikçi ve stratejik özellikler:
+
+Akıllı otel karşılaştırma aracı ve kişiselleştirilmiş öneri motoru.
 
 Fiyat takip ve alarm kurma özellikleri.
-
-Kişiselleştirilmiş otel öneri motoru.
 
 Otel yöneticileri için kapsamlı analitik ve raporlama paneli.
 
@@ -110,33 +92,27 @@ Promosyon kodu ve reklam modülleri.
 Misafir-otel arası direkt mesajlaşma sistemi.
 
 💻 Teknik Mimarî ve Yaklaşım
-Geliştirme Yaklaşımı: Backend-First
-
-Projemizde öncelikle tüm iş mantığını ve veri akışını yönetecek güçlü bir API altyapısı tasarlayacak, kodlayacak ve titizlikle test edeceğiz. Sağlam bir backend temeli, frontend geliştirmesini daha verimli ve sorunsuz hale getirecektir.
+Projenin teknik omurgası, dayanıklılık, ölçeklenebilirlik ve performans göz önünde bulundurularak belirlenmiştir. Backend-First yaklaşımıyla, tüm iş mantığını barındıran güçlü bir API altyapısı oluşturulacaktır.
 
 Teknoloji Yığını (Tech Stack)
 Frontend: Angular
 
-Tek sayfa uygulama (SPA) mimarisiyle modern, hızlı ve duyarlı bir kullanıcı arayüzü.
+Tek sayfa uygulama (SPA) mimarisiyle dinamik ve hızlı bir kullanıcı deneyimi sunma.
 
-TypeScript'in güçlü tip denetimi sayesinde daha güvenli ve ölçeklenebilir kod yazımı.
-
-Material Design prensiplerine dayalı kullanıcı arayüzü komponentleri için Angular Material veya benzeri bir kütüphane kullanımı.
+TypeScript'in sağladığı güçlü tip denetimi ve geliştirme verimliliği.
 
 Backend: Node.js (Express.js)
 
-Yüksek performanslı, eşzamansız ve ölçeklenebilir RESTful API'ler oluşturmak için ideal bir ortam.
+Yüksek performanslı, eşzamansız ve ölçeklenebilir RESTful API'ler oluşturmak için tercih.
 
-Olay tabanlı mimarisi sayesinde yoğun yük altında bile eş zamanlı bağlantıları etkin bir şekilde yönetme yeteneği.
+Kimlik doğrulama ve yetkilendirme için JWT (JSON Web Tokens) kullanımı.
 
-Kullanıcı kimlik doğrulaması ve yetkilendirmesi için JWT (JSON Web Tokens) kullanımı.
-
-Temel Kütüphaneler: Veritabanı etkileşimi için pg (veya Sequelize/TypeORM), güvenlik için bcryptjs, JWT için jsonwebtoken, CORS politikası yönetimi için cors, ortam değişkenleri için dotenv.
+Temel Kütüphaneler: Veritabanı etkileşimi için pg (veya ORM), güvenlik için bcryptjs, JWT için jsonwebtoken, CORS politikası yönetimi için cors, ortam değişkenleri için dotenv.
 
 Veritabanı: PostgreSQL
 
-İlişkisel veri tabanı yapısı sayesinde otel, kullanıcı, rezervasyon gibi karmaşık verilerin tutarlı ve güvenli bir şekilde depolanması.
+İlişkisel veri tabanı yapısı sayesinde multi-tenant verilerin tutarlı ve güvenli bir şekilde depolanması için ideal.
 
-Yüksek performans, güvenilirlik ve ACID özelliklerini tam destekleme.
+Yüksek performans ve güvenilirlik.
 
-Veritabanı etkileşimini kolaylaştırmak için ORM (Object-Relational Mapping) araçları (örneğin Sequelize) kullanma.
+Veritabanı etkileşimini kolaylaştırmak için ORM (Object-Relational Mapping) araçları (örneğin Sequelize veya TypeORM) kullanılacaktır.
