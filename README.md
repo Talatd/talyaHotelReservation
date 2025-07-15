@@ -1,4 +1,5 @@
 Talya Hotel Resevation System
+
 🏨 Multi-Tenant Otel Rezervasyon Platformu: Geleceğin Konaklama Deneyimi
 Bu proje, Elektrwaweb Talya Bilişim tarafından geliştirilmekte olan, birden fazla otelin kendi operasyonlarını uçtan uca yönetebileceği çok kiracılı (multi-tenant), yenilikçi bir otel rezervasyon platformudur. Hedefimiz, hem misafirlere kusursuz bir arama ve rezervasyon deneyimi sunmak hem de otel işletmelerine dijital varlıklarını güçlendirecek kapsamlı araçlar sağlamaktır.
 
